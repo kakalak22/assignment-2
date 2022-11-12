@@ -1,24 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+import DanhSachSanPham from './admin/page/san-pham/components/DanhSachSanPham';
+import AdminLayout from './admin/layout/AdminLayout';
+import { Route, Routes } from "react-router-dom";
+import FormTaoSanPham from './admin/page/san-pham/components/FormTaoSanPham';
+import FormChinhSuaSanPham from './admin/page/san-pham/components/FormChinhSuaSanPham';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AdminLayout>
+      <Routes>
+        <Route path="admin">
+          <Route path='san-pham'>
+            <Route index element={<DanhSachSanPham />} />
+            <Route path='danh-sach-san-pham' element={<DanhSachSanPham />} />
+            <Route path='tao-san-pham' element={<FormTaoSanPham />} />
+            <Route path='chinh-sua-san-pham/:id' element={<FormChinhSuaSanPham />} />
+          </Route>
+        </Route>
+      </Routes>
+    </AdminLayout>
   );
 }
 
