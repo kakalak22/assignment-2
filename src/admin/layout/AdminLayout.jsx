@@ -18,32 +18,6 @@ const AdminLayout = ({ children }) => {
   const { Header, Content, Footer, Sider } = Layout;
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-  const { Title } = Typography;
-  // const navigatePage = (key) => {
-  //   const newKey = parseInt(key);
-  //   console.log(newKey);
-  //   switch (newKey) {
-  //     case 1: {
-  //       navigate("/");
-  //     }
-
-  //     case 2: {
-  //       navigate("/gio-hang");
-  //     }
-
-  //     case 3: {
-  //       navigate("/tao-san-pham");
-  //     }
-
-  //     case 4: {
-  //       navigate("/danh-sach-don-hang");
-  //     }
-
-  //     default: {
-  //       navigate("/");
-  //     }
-  //   }
-  // };
 
   return (
     <Layout
@@ -57,16 +31,9 @@ const AdminLayout = ({ children }) => {
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className="logo"></div>
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={["1"]}
-          mode="inline"
-          // items={items}
-          // onClick={({ key }) => {
-          //   navigatePage(key);
-          // }}
-        >
+        <Menu defaultSelectedKeys={["danh-sach-san-pham"]} mode="inline">
           <Menu.Item
+            className="menu-item"
             icon={<CarryOutFilled />}
             key="danh-sach-san-pham"
             onClick={() => navigate("/admin/san-pham/danh-sach-san-pham")}
@@ -85,20 +52,10 @@ const AdminLayout = ({ children }) => {
       <Layout className="site-layout">
         <Content
           style={{
-            margin: "0 16px",
+            margin: "40px 40px",
           }}
         >
-          <div
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              minHeight: 360,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {children}
-          </div>
+          <div className="site-layout-background">{children}</div>
         </Content>
         <Footer
           style={{

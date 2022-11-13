@@ -23,7 +23,7 @@ export default (state = initialSate, action) => {
             const { newDanhSachSanPham } = data;
             return {
                 ...state,
-                danhSachSanPham: newDanhSachSanPham
+                danhSachSanPham: newDanhSachSanPham,
             }
         }
 

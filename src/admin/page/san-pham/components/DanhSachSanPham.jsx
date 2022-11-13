@@ -1,23 +1,35 @@
-import { Button, Space } from "antd";
+import { Button, Space, Typography } from "antd";
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SearchBox from "../../../../common/Search/components/SearchBox";
 import * as Actions from "../actionsTypeSanpham";
 import TableSanPham from "./TableSanPham";
 
 const DanhSachSanPham = () => {
   const dispatch = useDispatch();
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
+  const { searchResults } = useSelector((state) => state.reducerSearchResult);
+  console.log(searchResults);
   useEffect(() => {
     if (danhSachSanPham.length < 1)
       dispatch({
         type: Actions.CALL_API,
       });
   }, []);
+  const { Title } = Typography;
   return (
-    <Space>
-      <TableSanPham danhSachSanPham={danhSachSanPham} />
-    </Space>
+    <div style={{ width: "100%" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Title level={3}>Danh Sách Sản Phẩm</Title>
+        <SearchBox />
+      </div>
+      <TableSanPham
+        danhSachSanPham={
+          searchResults.length > 0 ? searchResults : danhSachSanPham
+        }
+      />
+    </div>
   );
 };
 
