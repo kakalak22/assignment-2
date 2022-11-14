@@ -24,7 +24,7 @@ const DanhSachSanPham = () => {
         <Title level={3}>Danh Sách Sản Phẩm</Title>
         <SearchBox
           searchField={danhSachSanPham}
-          size="large"
+          size={"middle"}
           isSeclect={true}
         />
       </div>

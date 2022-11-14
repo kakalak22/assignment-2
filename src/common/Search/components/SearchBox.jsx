@@ -1,6 +1,6 @@
 import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Radio, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../actionTypesSearch";
@@ -10,28 +10,30 @@ const SearchBox = ({ size, isSeclect, searchField }) => {
   const dispatch = useDispatch();
   const [searchVal, setSearchVal] = useState("");
   const [selectedValue, setSelectedValue] = useState("ten");
+  const [isSearched, setIsSearched] = useState(false);
+
+  const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
 
   const onSelect = (value) => {
     setSelectedValue(value);
   };
 
-  const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
-  const { searchResults } = useSelector((state) => state.reducersearchResults);
-
-  // useEffect(() => {
-  //   if (searchResults.length > 0) {
-  //     dispatch({
-  //       type: Actions.SEARCH_PROCESS,
-  //       data: {
-  //         searchValue: searchVal,
-  //         ttype: selectedValue,
-  //         searchField: searchField,
-  //       },
-  //     });
-  //   }
-  // }, [danhSachSanPham]);
+  useEffect(() => {
+    if (isSearched) {
+      dispatch({
+        type: Actions.SEARCH_PROCESS,
+        data: {
+          searchValue: searchVal,
+          ttype: selectedValue,
+          searchField: searchField,
+          isRecall: true,
+        },
+      });
+    }
+  }, [danhSachSanPham]);
 
   const onSearch = (value) => {
+    setIsSearched(true);
     setSearchVal(value);
     dispatch({
       type: Actions.SEARCH_PROCESS,
@@ -39,6 +41,7 @@ const SearchBox = ({ size, isSeclect, searchField }) => {
         searchValue: value,
         ttype: selectedValue,
         searchField: searchField,
+        isRecall: false,
       },
     });
   };
@@ -47,6 +50,7 @@ const SearchBox = ({ size, isSeclect, searchField }) => {
     <Space.Compact size={size} direction="horizontal">
       {isSeclect ? (
         <Select
+          showArrow={false}
           defaultValue="ten"
           style={{
             width: 120,

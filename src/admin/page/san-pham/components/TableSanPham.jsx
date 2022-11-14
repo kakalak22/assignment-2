@@ -149,6 +149,7 @@ const TableSanPham = ({ danhSachSanPham }) => {
     <div style={{ width: "100%" }}>
       <div
         style={{
+          marginTop: 8,
           marginBottom: 16,
           display: "flex",
           justifyContent: "space-between",
@@ -178,7 +179,7 @@ const TableSanPham = ({ danhSachSanPham }) => {
         columns={columns}
         dataSource={danhSachSanPham}
         rowKey={(record) => record.id}
-        pagination={{ pageSizeOptions: [5, 10, 15] }}
+        pagination={{ pageSizeOptions: [5, 10, 15], defaultPageSize: 5 }}
         rowSelection={rowSelection}
         size="middle"
       />

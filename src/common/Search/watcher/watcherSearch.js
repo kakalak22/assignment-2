@@ -10,8 +10,7 @@ export function* watcherSearch() {
 function* watcherSearchProcess(action) {
     try {
         const { data = {} } = action;
-        const { searchValue, ttype, searchField } = data;
-        console.log(ttype);
+        const { searchValue, ttype, searchField, isRecall } = data;
         let newDanhSachSanPham = [];
         switch (ttype) {
             case "ten": {
@@ -35,13 +34,21 @@ function* watcherSearchProcess(action) {
             }
         };
 
+        if (searchValue.length === 0) {
+            notification.success({
+                description: `Hiển thị toàn bộ sản phẩm`,
+                placement: "bottomRight"
+            })
+        }
+
         if (!newDanhSachSanPham.length > 0) {
             notification.warning({
                 message: "Lỗi",
                 description: "Không tìm thấy sản phẩm theo thông tin đã nhập",
                 placement: "bottomRight"
             })
-        } else {
+        }
+        if (newDanhSachSanPham.length > 0 && !isRecall && searchValue.length > 0) {
             notification.success({
                 message: "Thành công",
                 description: `Tìm thấy ${newDanhSachSanPham.length} sản phẩm theo yêu cầu`,
@@ -59,3 +66,4 @@ function* watcherSearchProcess(action) {
     } catch (error) { }
 
 }
+
