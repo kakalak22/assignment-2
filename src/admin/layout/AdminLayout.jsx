@@ -13,6 +13,7 @@ import {
 import { Breadcrumb, Button, Layout, Menu, Typography } from "antd";
 import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import "./AdminLayout.css";
 
 const AdminLayout = ({ children }) => {
   const { Header, Content, Footer, Sider } = Layout;
@@ -21,6 +22,7 @@ const AdminLayout = ({ children }) => {
 
   return (
     <Layout
+      className="admin-layout"
       style={{
         minHeight: "100vh",
       }}

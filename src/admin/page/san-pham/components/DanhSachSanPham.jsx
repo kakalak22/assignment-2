@@ -9,7 +9,7 @@ import TableSanPham from "./TableSanPham";
 const DanhSachSanPham = () => {
   const dispatch = useDispatch();
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
-  const { searchResults } = useSelector((state) => state.reducerSearchResult);
+  const { searchResults } = useSelector((state) => state.reducersearchResults);
   console.log(searchResults);
   useEffect(() => {
     if (danhSachSanPham.length < 1)
@@ -22,7 +22,11 @@ const DanhSachSanPham = () => {
     <div style={{ width: "100%" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Title level={3}>Danh Sách Sản Phẩm</Title>
-        <SearchBox />
+        <SearchBox
+          searchField={danhSachSanPham}
+          size="large"
+          isSeclect={true}
+        />
       </div>
       <TableSanPham
         danhSachSanPham={

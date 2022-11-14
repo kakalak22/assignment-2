@@ -158,9 +158,14 @@ const FormTaoSanPham = () => {
           <InputNumber />
         </Form.Item>
 
+        <Form.Item name="moTa" label="Mô tả sản phẩm" initialValue={""}>
+          <Input.TextArea />
+        </Form.Item>
+
         <Form.Item name="hienThi" initialValue={false} valuePropName="checked">
           <Checkbox>Hiển thị</Checkbox>
         </Form.Item>
+
         <Form.Item
           wrapperCol={{
             offset: 7,

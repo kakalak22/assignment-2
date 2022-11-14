@@ -11,7 +11,7 @@ import {
   Modal,
   Checkbox,
 } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   DeleteOutlined,
   DeleteRowOutlined,
@@ -35,7 +35,6 @@ const TableSanPham = ({ danhSachSanPham }) => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const { Title, Text } = Typography;
 
   const deleteMultiSanPham = () => {
     Modal.confirm({
@@ -89,8 +88,18 @@ const TableSanPham = ({ danhSachSanPham }) => {
     },
     {
       title: "Tên sản phẩm",
-      dataIndex: "ten",
       key: "ten",
+      render: (record) => (
+        <Link
+          to={{
+            pathname: `/admin/san-pham/chi-tiet-san-pham/${record.id}`,
+          }}
+          state={{ sanPham: record }}
+          component={Typography.Link}
+        >
+          {record.ten}
+        </Link>
+      ),
     },
     {
       title: "Đơn giá",

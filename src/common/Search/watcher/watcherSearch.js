@@ -10,28 +10,27 @@ export function* watcherSearch() {
 function* watcherSearchProcess(action) {
     try {
         const { data = {} } = action;
-        const { searchValue, ttype } = data;
-        const { danhSachSanPham } = yield select(state => state.reducerSanPham);
+        const { searchValue, ttype, searchField } = data;
         console.log(ttype);
         let newDanhSachSanPham = [];
         switch (ttype) {
             case "ten": {
-                newDanhSachSanPham = danhSachSanPham.filter(sanPham => (lodash.includes(sanPham.ten.toLowerCase(), searchValue.toLowerCase())));
+                newDanhSachSanPham = searchField.filter(sanPham => (lodash.includes(sanPham.ten.toLowerCase(), searchValue.toLowerCase())));
                 break;
             }
 
             case "soLuongLonHon": {
-                newDanhSachSanPham = danhSachSanPham.filter(sanPham => sanPham.soLuongSanPham >= parseInt(searchValue))
+                newDanhSachSanPham = searchField.filter(sanPham => sanPham.soLuongSanPham >= parseInt(searchValue))
                 break;
             }
 
             case "soLuongNhoHon": {
-                newDanhSachSanPham = danhSachSanPham.filter(sanPham => sanPham.soLuongSanPham <= parseInt(searchValue))
+                newDanhSachSanPham = searchField.filter(sanPham => sanPham.soLuongSanPham <= parseInt(searchValue))
                 break;
             }
 
             default: {
-                newDanhSachSanPham = danhSachSanPham.filter(sanPham => (lodash.includes(sanPham.ten.toLowerCase(), searchValue.toLowerCase())));
+                newDanhSachSanPham = searchField.filter(sanPham => (lodash.includes(sanPham.ten.toLowerCase(), searchValue.toLowerCase())));
                 break;
             }
         };

@@ -80,7 +80,7 @@ const FormChinhSuaSanPham = () => {
   };
 
   const validateNumber = (value) => {
-    if (value > 0) return Promise.resolve();
+    if (value >= 0) return Promise.resolve();
     return Promise.reject();
   };
 

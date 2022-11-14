@@ -109,6 +109,7 @@ function* workerMappingSanPham(action) {
 function* workerCallApi(action) {
     try {
         let res = yield call(workerDoApiCall);
+        console.log(res);
         yield put({
             type: Actions.SAN_PHAM_MAPPING,
             data: {
