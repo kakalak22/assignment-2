@@ -35,12 +35,12 @@ const DanhSachSanPhamClient = () => {
     }
     if (from <= to) {
       let newDanhSachSanPham = [];
-      if (searchResults.length > 0) {
+      if (searchResults?.length > 0) {
         newDanhSachSanPham = searchResults
           .filter((sanPham) => sanPham.donGia >= from && sanPham.donGia <= to)
           .filter((sanPham) => sanPham.hienThi);
       }
-      if (searchResults.length < 1) {
+      if (searchResults?.length < 1) {
         newDanhSachSanPham = danhSachSanPham
           .filter((sanPham) => sanPham.donGia >= from && sanPham.donGia <= to)
           .filter((sanPham) => sanPham.hienThi);
@@ -74,7 +74,7 @@ const DanhSachSanPhamClient = () => {
       switch (selectedValue) {
         case "conHang": {
           newDanhSachSanPham =
-            searchResults.length > 0
+            searchResults?.length > 0
               ? searchResults
                   .filter((sanPham) => sanPham.soLuongSanPham > 0)
                   .filter((sanPham) => sanPham.hienThi)
@@ -85,7 +85,7 @@ const DanhSachSanPhamClient = () => {
         }
         case "hetHang": {
           newDanhSachSanPham =
-            searchResults.length > 0
+            searchResults?.length > 0
               ? searchResults
                   .filter((sanPham) => sanPham.soLuongSanPham === 0)
                   .filter((sanPham) => sanPham.hienThi)
@@ -107,7 +107,7 @@ const DanhSachSanPhamClient = () => {
   }, [selectedValue]);
 
   useEffect(() => {
-    if (searchResults.length > 0) {
+    if (searchResults?.length > 0) {
       const newDanhSachSanPham = searchResults.filter(
         (sanPham) => sanPham.hienThi
       );
@@ -115,7 +115,7 @@ const DanhSachSanPhamClient = () => {
       console.log(temp);
       setPaginatedList(temp);
       setFilteredDanhSachSanPham(newDanhSachSanPham);
-      setPageTotal(searchResults.length);
+      setPageTotal(searchResults?.length);
     }
   }, [searchResults]);
 

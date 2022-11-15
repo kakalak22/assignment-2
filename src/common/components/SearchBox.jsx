@@ -19,6 +19,16 @@ const SearchBox = ({ size, isSeclect, searchField }) => {
   };
 
   useEffect(() => {
+    const newSearch = [];
+    dispatch({
+      type: Actions.SEARCH_SAVE_RESULT,
+      data: {
+        searchResults: newSearch,
+      },
+    });
+  }, []);
+
+  useEffect(() => {
     if (isSearched) {
       dispatch({
         type: Actions.SEARCH_PROCESS,

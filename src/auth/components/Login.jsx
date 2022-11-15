@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Checkbox,
   Divider,
   Form,
@@ -16,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { Title } = Typography;
+
   const onFinish = (values) => {
     console.log("Success:", values);
     dispatch({
@@ -40,21 +42,22 @@ const Login = () => {
         backgroundColor: "#f0f2f5",
       }}
     >
-      <Space
-        style={{
-          width: "30%",
-          height: "80%",
-          backgroundColor: "#ffffff",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          borderRadius: "10px",
+      <Card
+        title="Đăng nhập"
+        style={{ width: "400px", height: "400px", borderRadius: "10px" }}
+        headStyle={{
+          backgroundColor: "#0d3b66",
+          color: "#faf0ca",
+          borderTopLeftRadius: "10px",
+          borderTopRightRadius: "10px",
+        }}
+        bodyStyle={{
+          paddingTop: "40px",
+          // backgroundColor: "#F4D35E"
         }}
       >
-        <Title level={1}>Đăng nhập</Title>
-        <Divider />
-
         <Form
+          layout="vertical"
           name="basic"
           initialValues={{
             remember: true,
@@ -64,6 +67,7 @@ const Login = () => {
           autoComplete="off"
         >
           <Form.Item
+            label="Username"
             name="username"
             rules={[
               {
@@ -75,6 +79,7 @@ const Login = () => {
             <Input placeholder="Username" />
           </Form.Item>
           <Form.Item
+            label="Password"
             name="password"
             rules={[
               {
@@ -87,16 +92,25 @@ const Login = () => {
           </Form.Item>
           <Form.Item
             wrapperCol={{
-              offset: 5,
+              offset: 8,
               span: 16,
             }}
           >
-            <Button size="large" shape="round" type="primary" htmlType="submit">
+            <Button
+              style={{
+                backgroundColor: "#0d3b66",
+                color: "#faf0ca",
+              }}
+              size="large"
+              shape="round"
+              type="primary"
+              htmlType="submit"
+            >
               Đăng nhập
             </Button>
           </Form.Item>
         </Form>
-      </Space>
+      </Card>
     </div>
   );
 };

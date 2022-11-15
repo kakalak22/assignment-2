@@ -1,6 +1,7 @@
 import * as Actions from "../actionTypesAuth";
 
 const initialSate = {
+    isUser: false,
     isAdmin: false,
     isLogin: false
 }
@@ -10,11 +11,12 @@ export default (state = initialSate, action) => {
 
         case Actions.AUTH_LOGIN: {
             const { data = {} } = action;
-            const { isAdmin, isLogin } = data;
+            const { isAdmin, isLogin, isUser } = data;
             return {
                 ...state,
                 isAdmin: isAdmin,
-                isLogin: isLogin
+                isLogin: isLogin,
+                isUser: isUser
             }
         }
 

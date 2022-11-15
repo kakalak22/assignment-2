@@ -2,7 +2,7 @@
 import 'antd/dist/antd.css';
 import DanhSachSanPham from './admin/page/san-pham/components/DanhSachSanPham';
 import AdminLayout from './admin/layout/AdminLayout';
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import FormTaoSanPham from './admin/page/san-pham/components/FormTaoSanPham';
 import FormChinhSuaSanPham from './admin/page/san-pham/components/FormChinhSuaSanPham';
 import ChiTietSanPham from './admin/page/san-pham/components/ChiTietSanPham';
@@ -13,18 +13,38 @@ import Login from './auth/components/Login';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import { useSelector } from 'react-redux';
 import NotFound from './common/components/NotFound';
+import { useEffect, useState } from 'react';
+import Loading from './common/components/Loading';
 
 function App() {
-  const { isAdmin } = useSelector(state => state.reducerAuth);
-  console.log(isAdmin)
+  const navigate = useNavigate();
+  const { isAdmin, isUser, isLogin } = useSelector(state => state.reducerAuth);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLogin) {
+      if (isUser) {
+        navigate("/client", { replace: true })
+      }
+      if (isAdmin) {
+        navigate("/admin/san-pham", { replace: true })
+      }
+    }
+    setLoading(false);
+  }, [])
+
+  if (loading) return <Loading />
+
   return (
     <Routes>
       <Route path='/'>
         <Route index element={<Login />} />
-        <Route path="client">
-          <Route path='danh-sach-san-pham' element={<ProtectedRoute><DanhSachSanPhamClient /></ProtectedRoute>} />
-          <Route path='san-pham/:id' element={<ProtectedRoute><ChiTietSanPhamClient /></ProtectedRoute>} />
-        </Route>
+        {isUser &&
+          <Route path="client">
+            <Route index element={<ProtectedRoute><DanhSachSanPhamClient /></ProtectedRoute>} />
+            <Route path='danh-sach-san-pham' element={<ProtectedRoute><DanhSachSanPhamClient /></ProtectedRoute>} />
+            <Route path='san-pham/:id' element={<ProtectedRoute><ChiTietSanPhamClient /></ProtectedRoute>} />
+          </Route>}
         {isAdmin && <Route path="admin">
           <Route path='san-pham' >
             <Route index element={<ProtectedRoute><DanhSachSanPham /></ProtectedRoute>} />

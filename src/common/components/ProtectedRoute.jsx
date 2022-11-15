@@ -5,10 +5,12 @@ import AdminLayout from "../../admin/layout/AdminLayout";
 import ClientLayout from "../../client/page/layout/ClientLayout";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAdmin, isLogin } = useSelector((state) => state.reducerAuth);
+  const { isAdmin, isLogin, isUser } = useSelector(
+    (state) => state.reducerAuth
+  );
   if (!isLogin) return <Navigate to="/" />;
   if (isAdmin) return <AdminLayout>{children}</AdminLayout>;
-  return <ClientLayout>{children}</ClientLayout>;
+  if (isUser) return <ClientLayout>{children}</ClientLayout>;
 };
 
 export default ProtectedRoute;

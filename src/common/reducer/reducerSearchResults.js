@@ -1,9 +1,7 @@
 import * as Actions from "../actionTypesSearch";
 
 const initialSate = {
-    searchResults: [
-    ],
-    isSearchResultsExist: false
+    searchResults: []
 }
 
 export default (state = initialSate, action) => {

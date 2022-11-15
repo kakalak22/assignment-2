@@ -30,7 +30,7 @@ const DanhSachSanPham = () => {
       </div>
       <TableSanPham
         danhSachSanPham={
-          searchResults.length > 0 ? searchResults : danhSachSanPham
+          searchResults?.length > 0 ? searchResults : danhSachSanPham
         }
       />
     </div>
