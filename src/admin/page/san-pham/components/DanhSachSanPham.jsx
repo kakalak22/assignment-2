@@ -2,14 +2,14 @@ import { Button, Space, Typography } from "antd";
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "../../../../common/Search/components/SearchBox";
+import SearchBox from "../../../../common/components/SearchBox";
 import * as Actions from "../actionsTypeSanpham";
 import TableSanPham from "./TableSanPham";
 
 const DanhSachSanPham = () => {
   const dispatch = useDispatch();
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
-  const { searchResults } = useSelector((state) => state.reducersearchResults);
+  const { searchResults } = useSelector((state) => state.reducerSearchResults);
   console.log(searchResults);
   useEffect(() => {
     if (danhSachSanPham.length < 1)

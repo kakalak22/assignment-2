@@ -2,12 +2,10 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Breadcrumb, Col, Layout, Menu, Row, Select } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import SearchBox from "../../../common/Search/components/SearchBox";
-import DanhSachSanPham from "../san-pham/components/DanhSachSanPham";
-import SanPham from "../san-pham/components/SanPham";
+import SearchBox from "../../../common/components/SearchBox";
 import "./ClientLayout.css";
 
-const ClientLayout = () => {
+const ClientLayout = ({ children }) => {
   const { Header, Content, Footer } = Layout;
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
 
@@ -45,9 +43,7 @@ const ClientLayout = () => {
           padding: "0 50px",
         }}
       >
-        <div className="site-layout-content">
-          <DanhSachSanPham />
-        </div>
+        <div className="site-layout-content">{children}</div>
       </Content>
       <Footer
         style={{

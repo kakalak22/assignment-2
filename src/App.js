@@ -7,21 +7,35 @@ import FormTaoSanPham from './admin/page/san-pham/components/FormTaoSanPham';
 import FormChinhSuaSanPham from './admin/page/san-pham/components/FormChinhSuaSanPham';
 import ChiTietSanPham from './admin/page/san-pham/components/ChiTietSanPham';
 import ClientLayout from './client/page/layout/ClientLayout';
+import DanhSachSanPhamClient from './client/page/san-pham/components/DanhSachSanPhamClient';
+import ChiTietSanPhamClient from './client/page/san-pham/components/ChiTietSanPhamClient';
+import Login from './auth/components/Login';
+import ProtectedRoute from './common/components/ProtectedRoute';
+import { useSelector } from 'react-redux';
+import NotFound from './common/components/NotFound';
 
 function App() {
+  const { isAdmin } = useSelector(state => state.reducerAuth);
+  console.log(isAdmin)
   return (
     <Routes>
-      <Route path="client">
-        <Route path='danh-sach-san-pham' element={<ClientLayout></ClientLayout>} />
-      </Route>
-      <Route path="admin">
-        <Route path='san-pham' >
-          <Route index element={<AdminLayout><DanhSachSanPham /></AdminLayout>} />
-          <Route path='danh-sach-san-pham' element={(<AdminLayout><DanhSachSanPham /></AdminLayout>)} />
-          <Route path='tao-san-pham' element={<AdminLayout><FormTaoSanPham /></AdminLayout>} />
-          <Route path='chinh-sua-san-pham/:id' element={<AdminLayout><FormChinhSuaSanPham /></AdminLayout>} />
-          <Route path='chi-tiet-san-pham/:id' element={<AdminLayout><ChiTietSanPham /></AdminLayout>} />
+      <Route path='/'>
+        <Route index element={<Login />} />
+        <Route path="client">
+          <Route path='danh-sach-san-pham' element={<ProtectedRoute><DanhSachSanPhamClient /></ProtectedRoute>} />
+          <Route path='san-pham/:id' element={<ProtectedRoute><ChiTietSanPhamClient /></ProtectedRoute>} />
         </Route>
+        {isAdmin && <Route path="admin">
+          <Route path='san-pham' >
+            <Route index element={<ProtectedRoute><DanhSachSanPham /></ProtectedRoute>} />
+            <Route path='danh-sach-san-pham' element={(<ProtectedRoute><DanhSachSanPham /></ProtectedRoute>)} />
+            <Route path='tao-san-pham' element={<ProtectedRoute><FormTaoSanPham /></ProtectedRoute>} />
+            <Route path='chinh-sua-san-pham/:id' element={<ProtectedRoute><FormChinhSuaSanPham /></ProtectedRoute>} />
+            <Route path='chi-tiet-san-pham/:id' element={<ProtectedRoute><ChiTietSanPham /></ProtectedRoute>} />
+          </Route>
+        </Route>}
+        <Route path="*" element={<NotFound />} />
+
       </Route>
     </Routes>
   );

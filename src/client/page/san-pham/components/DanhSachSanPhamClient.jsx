@@ -13,9 +13,9 @@ import { useSelector } from "react-redux";
 import SanPham from "./SanPham";
 import * as lodash from "lodash";
 
-const DanhSachSanPham = () => {
+const DanhSachSanPhamClient = () => {
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
-  const { searchResults } = useSelector((state) => state.reducersearchResults);
+  const { searchResults } = useSelector((state) => state.reducerSearchResults);
 
   //local state
   const [pageTotal, setPageTotal] = useState(danhSachSanPham.length);
@@ -244,4 +244,4 @@ const DanhSachSanPham = () => {
   );
 };
 
-export default DanhSachSanPham;
+export default DanhSachSanPhamClient;

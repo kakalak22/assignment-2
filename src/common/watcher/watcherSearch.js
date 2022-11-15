@@ -34,7 +34,7 @@ function* watcherSearchProcess(action) {
             }
         };
 
-        if (searchValue.length === 0) {
+        if (searchValue.length === 0 && !isRecall) {
             notification.success({
                 description: `Hiển thị toàn bộ sản phẩm`,
                 placement: "bottomRight"

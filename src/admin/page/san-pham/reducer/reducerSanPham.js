@@ -27,8 +27,6 @@ export default (state = initialSate, action) => {
             }
         }
 
-
-
         default:
             return state;
     }

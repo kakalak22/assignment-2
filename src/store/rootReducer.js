@@ -1,10 +1,13 @@
 import { combineReducers } from "redux";
 import reducerSanPham from "../admin/page/san-pham/reducer/reducerSanPham";
-import reducersearchResults from "../common/Search/reducer/reducerSearchResults";
+import reducerSearchResults from "../common/reducer/reducerSearchResults";
+import reducerAuth from "../auth/reducer/reducerAuth";
+
 
 const rootReducer = combineReducers({
     reducerSanPham,
-    reducersearchResults,
+    reducerSearchResults,
+    reducerAuth
 })
 
 export default rootReducer;
