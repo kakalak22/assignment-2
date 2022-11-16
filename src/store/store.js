@@ -9,7 +9,7 @@ import storage from 'redux-persist/lib/storage'
 const persistConfig = {
     key: 'root',
     storage,
-    blacklist: ['reducersearchResults']
+    blacklist: ['reducersearchResults', 'reducerMyCart']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

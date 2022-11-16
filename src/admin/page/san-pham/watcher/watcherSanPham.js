@@ -28,50 +28,39 @@ const getNotification = (message, description) => {
 
 function* workerCreateNewSanPham(action) {
     try {
-        const newId = uuidv4();
         const { danhSachSanPham } = yield select(state => state.reducerSanPham);
         const { data = {} } = action;
 
         const { sanPham, imgUrl } = data;
-        let newDanhSachSanPham = [{
-            id: newId, ...sanPham, linkHinhAnh: imgUrl
-        }, ...danhSachSanPham];
+        let newObj = {
+            ten: sanPham.ten,
+            moTa: sanPham.moTa,
+            linkHinhAnh: imgUrl || "",
+            donGia: sanPham.donGia,
+            soLuongSanPham: sanPham.soLuongSanPham,
+            hienThi: sanPham.hienThi,
+        };
+
+        yield put({
+            type: Actions.SAN_PHAM_CHECK_SAVED,
+            data: {
+                sanPham: newObj,
+                ttype: "create"
+            }
+        })
+
+        const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+        const { newSanPham } = res.data;
+        console.log(newSanPham);
+        let newDanhSachSanPham = [newSanPham, ...danhSachSanPham];
         yield put({
             type: Actions.SAN_PHAM_SAVE, data:
             {
                 newDanhSachSanPham: newDanhSachSanPham
             }
         });
-        yield put({
-            type: Actions.SAN_PHAM_CHECK_SAVED,
-            data: {
-                prevDanhSachSanPham: danhSachSanPham
-            }
-        })
+        getNotification("Thành công", "Sản phẩm được tạo thành công");
 
-        const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
-        const { isSaved } = res.data;
-        if (isSaved)
-            getNotification("Thành công", "Sản phẩm được tạo thành công");
-
-    } catch (error) { }
-}
-
-
-function* workerCheckSavedSanPham(action) {
-    try {
-        const { data = {} } = action;
-        const { prevDanhSachSanPham } = data;
-        const { danhSachSanPham } = yield select(state => state.reducerSanPham);
-        let isSaved = false;
-        if (JSON.stringify(prevDanhSachSanPham) !== JSON.stringify(danhSachSanPham))
-            isSaved = true
-        yield put({
-            type: Actions.SAN_PHAM_CHECK_SAVED_TAKE,
-            data: {
-                isSaved: isSaved
-            }
-        })
     } catch (error) { }
 }
 
@@ -96,13 +85,19 @@ function* workerMappingSanPham(action) {
                 // soLuongSanPham: getRandomIntInclusive(0, 50),
                 // hienThi: true,
                 // moTa: dog.bred_for
-                id: uuidv4(),
-                ten: dog.title,
-                linkHinhAnh: dog.thumbnail,
-                donGia: getRandomIntInclusive(100, 5000) * 1000,
-                soLuongSanPham: getRandomIntInclusive(0, 50),
-                hienThi: true,
-                moTa: dog.description
+                id: `${index}`,
+                // ten: dog.title,
+                // linkHinhAnh: dog.thumbnail,
+                // donGia: getRandomIntInclusive(100, 5000) * 1000,
+                // soLuongSanPham: getRandomIntInclusive(0, 50),
+                // hienThi: true,
+                // moTa: dog.description //// dummy data
+                ten: dog.ten,
+                linkHinhAnh: dog.linkHinhAnh,
+                donGia: dog.donGia,
+                soLuongSanPham: dog.soLuongSanPham,
+                hienThi: dog.hienThi,
+                moTa: dog.moTa
             }
             newDanhSachSanPham.push(sanPhamTmp);
         })
@@ -113,39 +108,6 @@ function* workerMappingSanPham(action) {
             }
         })
     } catch (error) { }
-}
-
-function* workerCallApi(action) {
-    try {
-        let res = yield call(workerDoApiCall);
-        console.log(res);
-        yield put({
-            type: Actions.SAN_PHAM_MAPPING,
-            data: {
-                dogList: res
-            }
-        })
-    } catch (error) { }
-}
-
-function workerDoApiCall(action) {
-    const options = {
-        method: 'GET',
-        // url: 'https://api.thedogapi.com/v1/breeds',
-        // params: {
-        //     limit: 100
-        // }
-        url: "https://dummyjson.com/products",
-        params: {
-            limit: 100
-        }
-    };
-
-    return axios(options).then(res => {
-        return res.data.products;
-    }).catch(error => {
-        return { error: "error-catch" };
-    })
 }
 
 function* workerUpdateSanPham(action) {
@@ -160,22 +122,42 @@ function* workerUpdateSanPham(action) {
         newDanhSachSanPham[index] = sanPham;
 
         yield put({
-            type: Actions.SAN_PHAM_SAVE,
-            data: {
-                newDanhSachSanPham: newDanhSachSanPham
-            }
-        });
-        yield put({
             type: Actions.SAN_PHAM_CHECK_SAVED,
             data: {
-                prevDanhSachSanPham: danhSachSanPham
+                sanPham: sanPham,
+                ttype: "update"
             }
-        })
+        });
 
         const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
-        const { isSaved } = res.data;
-        if (isSaved)
+        const { newSanPham } = res.data;
+        if (newSanPham.id) {
+            yield put({
+                type: Actions.SAN_PHAM_SAVE,
+                data: {
+                    newDanhSachSanPham: newDanhSachSanPham
+                }
+            });
             getNotification("Thành công", "Sản phẩm đã được cập nhật");
+        }
+
+        // yield put({
+        //     type: Actions.SAN_PHAM_SAVE,
+        //     data: {
+        //         newDanhSachSanPham: newDanhSachSanPham
+        //     }
+        // });
+        // yield put({
+        //     type: Actions.SAN_PHAM_CHECK_SAVED,
+        //     data: {
+        //         prevDanhSachSanPham: danhSachSanPham
+        //     }
+        // })
+
+        // const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+        // const { isSaved } = res.data;
+        // if (isSaved)
+        //     getNotification("Thành công", "Sản phẩm đã được cập nhật");
     } catch (error) { }
 }
 
@@ -184,25 +166,35 @@ function* workerDeleteSanPham(action) {
         const { data = {} } = action;
         let { idSanPham } = data;
         const { danhSachSanPham } = yield select(state => state.reducerSanPham);
-        let newDanhSachSanPham = danhSachSanPham.filter(sanPham => sanPham.id !== idSanPham);
 
-        yield put({
-            type: Actions.SAN_PHAM_SAVE,
-            data: {
-                newDanhSachSanPham: newDanhSachSanPham
-            }
-        });
+        // yield put({
+        //     type: Actions.SAN_PHAM_SAVE,
+        //     data: {
+        //         newDanhSachSanPham: newDanhSachSanPham
+        //     }
+        // });
 
         yield put({
             type: Actions.SAN_PHAM_CHECK_SAVED,
             data: {
-                prevDanhSachSanPham: danhSachSanPham
+                id: idSanPham,
+                ttype: "delete"
             }
         });
 
+        // const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+        // const { isSaved } = res.data;
+
         const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
-        const { isSaved } = res.data;
-        if (isSaved) getNotification("Thành công", "Đã xóa sản phẩm");
+        const { newSanPham } = res.data;
+        let newDanhSachSanPham = danhSachSanPham.filter(sanPham => sanPham.id !== newSanPham.id);
+        yield put({
+            type: Actions.SAN_PHAM_SAVE, data:
+            {
+                newDanhSachSanPham: newDanhSachSanPham
+            }
+        });
+        getNotification("Thành công", "Đã xóa sản phẩm");
 
     } catch (error) { }
 }
@@ -211,26 +203,54 @@ function* workerDeleteMultiSanPham(action) {
     try {
         const { data = {} } = action;
         const { sanPhamToDelete } = data;
+        console.log("delete multi", sanPhamToDelete)
         const { danhSachSanPham } = yield select(state => state.reducerSanPham);
         let newDanhSachSanPham = lodash.differenceBy(danhSachSanPham, sanPhamToDelete, 'id');
 
+        // yield put({
+        //     type: Actions.SAN_PHAM_SAVE,
+        //     data: {
+        //         newDanhSachSanPham: newDanhSachSanPham
+        //     }
+        // });
+
+        for (let i = 0; i < sanPhamToDelete.length; i++) {
+            yield put({
+                type: Actions.SAN_PHAM_CHECK_SAVED,
+                data: {
+                    id: sanPhamToDelete[i].id,
+                    ttype: "delete"
+                }
+            });
+
+            // const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+            // const { isSaved } = res.data;
+
+            const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+            const { newSanPham } = res.data;
+            if (newSanPham.id) {
+
+                getNotification("Thành công", "Đã xóa sản phẩm");
+            }
+        }
+
         yield put({
-            type: Actions.SAN_PHAM_SAVE,
-            data: {
+            type: Actions.SAN_PHAM_SAVE, data:
+            {
                 newDanhSachSanPham: newDanhSachSanPham
             }
         });
 
-        yield put({
-            type: Actions.SAN_PHAM_CHECK_SAVED,
-            data: {
-                prevDanhSachSanPham: danhSachSanPham
-            }
-        });
+        // yield put({
+        //     type: Actions.SAN_PHAM_CHECK_SAVED,
+        //     data: {
+        //         prevDanhSachSanPham: danhSachSanPham
+        //     }
+        // });
 
-        const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
-        const { isSaved } = res.data;
-        if (isSaved) getNotification("Thành công", "Đã xóa sản phẩm được chọn");
+        // const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+        // const { isSaved } = res.data;
+        // if (isSaved) getNotification("Thành công", "Đã xóa sản phẩm được chọn");
     } catch (error) {
 
     }
@@ -239,30 +259,157 @@ function* workerDeleteMultiSanPham(action) {
 function* workerChangeStatus(action) {
     try {
         const { data = {} } = action;
-        const { idSanPham } = data;
+        const { idSanPham, hienThi } = data;
         const { danhSachSanPham } = yield select(state => state.reducerSanPham);
         const index = danhSachSanPham.findIndex(sanPham => sanPham.id === idSanPham);
-        console.log(index);
         let newDanhSachSanPham = lodash.cloneDeep(danhSachSanPham);
-        newDanhSachSanPham[index].hienThi = !newDanhSachSanPham[index].hienThi;
-        yield put({
-            type: Actions.SAN_PHAM_SAVE,
-            data: {
-                newDanhSachSanPham: newDanhSachSanPham
-            }
-        });
+        newDanhSachSanPham[index].hienThi = !hienThi;
+
+        // yield put({
+        //     type: Actions.SAN_PHAM_SAVE,
+        //     data: {
+        //         newDanhSachSanPham: newDanhSachSanPham
+        //     }
+        // });
 
         yield put({
             type: Actions.SAN_PHAM_CHECK_SAVED,
             data: {
-                prevDanhSachSanPham: danhSachSanPham
+                sanPham: newDanhSachSanPham[index],
+                ttype: "update"
             }
         });
 
         const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
-        const { isSaved } = res.data;
-        console.log(isSaved);
-        if (isSaved) getNotification("Thành công", "Đã thay đổi trạng thái hiển thị");
+        const { newSanPham } = res.data;
+        if (newSanPham.id) {
+            yield put({
+                type: Actions.SAN_PHAM_SAVE,
+                data: {
+                    newDanhSachSanPham: newDanhSachSanPham
+                }
+            });
+            getNotification("Thành công", "Đã thay đổi trạng thái hiển thị");
+        }
+
     } catch (error) { }
 
+}
+
+// Kiểm tra call api thành công hay không
+
+function* workerCheckSavedSanPham(action) {
+    try {
+        const { data = {} } = action;
+        const { sanPham, ttype, id } = data;
+        let res = null;
+        switch (ttype) {
+            case "create": {
+                res = yield call(workerPostApi, { sanPham: sanPham });
+                break;
+            };
+
+            case "delete": {
+                res = yield call(workerDeleteApi, { id: id })
+                break;
+            }
+
+            case "update": {
+                res = yield call(workerUpdateApi, { sanPham: sanPham })
+                break;
+            }
+
+            default: {
+                console.log("chua nhap ttype")
+                break;
+            }
+        }
+        yield put({
+            type: Actions.SAN_PHAM_CHECK_SAVED_TAKE,
+            data: {
+                newSanPham: res
+            }
+        })
+
+    } catch (error) { }
+}
+
+
+function* workerCallApi() {
+    try {
+        let res = yield call(workerDoApiCall);
+        yield put({
+            type: Actions.SAN_PHAM_MAPPING,
+            data: {
+                dogList: res
+            }
+        })
+    } catch (error) { }
+}
+/// Call API
+
+function workerUpdateApi(data) {
+    const { sanPham } = data;
+    console.log(sanPham.id);
+    const options = {
+        method: 'PUT',
+        url: `https://637471ab08104a9c5f8038ef.mockapi.io/api/v1/products/${sanPham.id}`,
+        data: sanPham
+    }
+
+    return axios(options).then(res => {
+        console.log(res.data)
+        return res.data;
+    }).catch(error => {
+        return { error: "error-catch" };
+    })
+}
+
+function workerDeleteApi(data) {
+    const { id } = data;
+    const options = {
+        method: 'DELETE',
+        url: `https://637471ab08104a9c5f8038ef.mockapi.io/api/v1/products/${id}`,
+    }
+
+    return axios(options).then(res => {
+        return res.data;
+    }).catch(error => {
+        return { error: "error-catch" };
+    })
+}
+
+
+function workerPostApi(data) {
+    const options = {
+        method: 'POST',
+        url: "https://637471ab08104a9c5f8038ef.mockapi.io/api/v1/products",
+        data: data.sanPham
+
+    }
+
+    return axios(options).then(res => {
+        console.log(res.data)
+        return res.data;
+    }).catch(error => {
+        return { error: "error-catch" };
+    })
+}
+
+function workerDoApiCall(action) {
+    const options = {
+        method: 'GET',
+        url: "https://637471ab08104a9c5f8038ef.mockapi.io/api/v1/products",
+        // url: "https://dummyjson.com/products",
+        // params: {
+        //     limit: 100
+        // }
+    }
+
+    return axios(options).then(res => {
+        return res.data;
+        // return res.data.products;
+    }).catch(error => {
+        return { error: "error-catch" };
+    })
 }

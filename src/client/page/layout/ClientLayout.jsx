@@ -1,5 +1,6 @@
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import {
+  Badge,
   Breadcrumb,
   Button,
   Col,
@@ -12,7 +13,7 @@ import {
   Space,
   Typography,
 } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import SearchBox from "../../../common/components/SearchBox";
@@ -20,9 +21,14 @@ import "./ClientLayout.css";
 import * as Actions from "../../../auth/actionTypesAuth";
 
 const ClientLayout = ({ children }) => {
+  const [count, setCount] = useState(0);
   const { Header, Content, Footer } = Layout;
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
   const { Title } = Typography;
+  const { danhSachSanPham: danhSachMycart } = useSelector(
+    (state) => state.reducerMyCart.myCart
+  );
+  console.log(danhSachMycart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,6 +45,10 @@ const ClientLayout = ({ children }) => {
       <Button onClick={handleLogOut}>Đăng xuất</Button>
     </Space>
   );
+
+  useEffect(() => {
+    if (danhSachMycart) setCount(danhSachMycart.length);
+  }, [danhSachMycart]);
 
   return (
     <Layout className="client-layout" style={{ minHeight: "100vh" }}>
@@ -74,7 +84,15 @@ const ClientLayout = ({ children }) => {
             </Popover>
           </Col>
           <Col span={1}>
-            <ShoppingCartOutlined style={{ color: "#fff", fontSize: "30px" }} />
+            <Badge
+              style={{ color: "#000000", fontWeight: 600 }}
+              count={count}
+              color="#ffffff"
+            >
+              <ShoppingCartOutlined
+                style={{ color: "#fff", fontSize: "30px" }}
+              />
+            </Badge>
           </Col>
         </Row>
       </Header>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as lodash from "lodash";
 import {
@@ -19,12 +19,13 @@ import {
   PlusCircleFilled,
   PlusOutlined,
 } from "@ant-design/icons";
-import { fromPairs } from "lodash";
+import * as Actions from "../../../../common/actionTypesSearch";
 
 const ChiTietSanPhamClient = () => {
   const id = useParams();
-  console.log(id);
+  const dispatch = useDispatch();
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
+
   const sanPham = lodash.find(danhSachSanPham, id);
   const { Title, Paragraph } = Typography;
   const [form] = Form.useForm();
@@ -41,7 +42,12 @@ const ChiTietSanPhamClient = () => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
+    dispatch({
+      type: Actions.ADD_TO_CART,
+      data: {
+        sanPham: { ...sanPham },
+      },
+    });
   };
 
   const onFinishFailed = (error) => {

@@ -55,10 +55,6 @@ const FormTaoSanPham = ({ title, id, danhSachSanPham }) => {
     });
   };
 
-  const onFieldsChange = (values, array) => {
-    console.log(array);
-  };
-
   const onFinish = (values) => {
     console.log(values);
     dispatch({
@@ -117,7 +113,6 @@ const FormTaoSanPham = ({ title, id, danhSachSanPham }) => {
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        onFieldsChange={onFieldsChange}
         autoComplete="off"
       >
         <Form.Item
