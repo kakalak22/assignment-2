@@ -1,13 +1,44 @@
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Breadcrumb, Col, Layout, Menu, Row, Select } from "antd";
+import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  Divider,
+  Layout,
+  Menu,
+  Popover,
+  Row,
+  Select,
+  Space,
+  Typography,
+} from "antd";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 import SearchBox from "../../../common/components/SearchBox";
 import "./ClientLayout.css";
+import * as Actions from "../../../auth/actionTypesAuth";
 
 const ClientLayout = ({ children }) => {
   const { Header, Content, Footer } = Layout;
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
+  const { Title } = Typography;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch({
+      type: Actions.AUTH_LOGOUT,
+      navigate: navigate,
+    });
+  };
+
+  const content = (
+    <Space direction="vertical">
+      <Title level={5}>Client</Title>
+      <Button onClick={handleLogOut}>Đăng xuất</Button>
+    </Space>
+  );
 
   return (
     <Layout className="client-layout" style={{ minHeight: "100vh" }}>
@@ -17,10 +48,12 @@ const ClientLayout = ({ children }) => {
             <Menu
               style={{ height: "45px" }}
               mode="horizontal"
-              defaultSelectedKeys={["1"]}
+              defaultSelectedKeys={["home"]}
+              className="client-menu"
             >
-              <Menu.Item>item 1</Menu.Item>
-              <Menu.Item>item 2</Menu.Item>
+              <Menu.Item onClick={() => navigate("/client")} key={"home"}>
+                Home
+              </Menu.Item>
             </Menu>
           </Col>
         </Row>
@@ -33,7 +66,14 @@ const ClientLayout = ({ children }) => {
           <Col span={8}>
             <SearchBox searchField={danhSachSanPham} size="large" />
           </Col>
-          <Col offset={7} span={1}>
+          <Col offset={6} span={1}>
+            <Popover content={content}>
+              <UserOutlined
+                style={{ cursor: "pointer", color: "#fff", fontSize: "30px" }}
+              />
+            </Popover>
+          </Col>
+          <Col span={1}>
             <ShoppingCartOutlined style={{ color: "#fff", fontSize: "30px" }} />
           </Col>
         </Row>
@@ -52,6 +92,7 @@ const ClientLayout = ({ children }) => {
       >
         Ant Design ©2018 Created by Ant UED
       </Footer>
+      <Outlet />
     </Layout>
   );
 };

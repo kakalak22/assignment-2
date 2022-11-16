@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -10,6 +10,7 @@ import {
   Typography,
   Upload,
   Checkbox,
+  Switch,
 } from "antd";
 import { MinusCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
@@ -19,10 +20,20 @@ import { storage } from "../../../../firebase-config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
-const FormTaoSanPham = () => {
+const FormTaoSanPham = ({ title, id, danhSachSanPham }) => {
   const dispatch = useDispatch();
   const [imageUrl, setImageUrl] = useState();
   const [form] = Form.useForm();
+  const [sanPham, setSanPham] = useState({});
+  const { Title } = Typography;
+
+  useEffect(() => {
+    if (id) {
+      const [sanPham] = danhSachSanPham.filter((sanPham) => sanPham.id === id);
+      setSanPham(sanPham);
+      form.setFieldsValue(sanPham);
+    }
+  }, [id]);
 
   const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -61,7 +72,6 @@ const FormTaoSanPham = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  const { Title } = Typography;
 
   const validateTen = (ten) => {
     const tenLength = ten?.trim().length;
@@ -70,25 +80,37 @@ const FormTaoSanPham = () => {
   };
 
   const validateNumber = (value) => {
-    if (value > 0) return Promise.resolve();
+    if (value >= 0) return Promise.resolve();
     return Promise.reject();
   };
 
   return (
-    <Space style={{ width: "100%" }} direction="vertical">
-      <Title>Tạo sản phẩm mới</Title>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Title>{title} </Title>
       <Divider />
       <Form
         form={form}
-        layout="vertical"
+        style={{
+          width: "60%",
+        }}
+        // layout="vertical"
         colon={true}
         labelAlign="left"
-        name="basic"
+        name="createForm"
         labelCol={{
-          span: 5,
+          offset: 4,
+          span: 6,
         }}
         wrapperCol={{
-          span: 15,
+          offset: 1,
+          span: 13,
         }}
         initialValues={{
           remember: true,
@@ -100,7 +122,7 @@ const FormTaoSanPham = () => {
       >
         <Form.Item
           name="upload"
-          label="Upload"
+          label="Hình ảnh"
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >
@@ -162,22 +184,27 @@ const FormTaoSanPham = () => {
           <Input.TextArea />
         </Form.Item>
 
-        <Form.Item name="hienThi" initialValue={false} valuePropName="checked">
-          <Checkbox>Hiển thị</Checkbox>
+        <Form.Item
+          label="Hiển thị"
+          name="hienThi"
+          initialValue={false}
+          valuePropName="checked"
+        >
+          <Switch />
         </Form.Item>
 
         <Form.Item
           wrapperCol={{
-            offset: 7,
-            span: 14,
+            offset: 9,
+            span: 15,
           }}
         >
-          <Button type="primary" htmlType="submit">
+          <Button size="large" shape="round" type="primary" htmlType="submit">
             Tạo sản phẩm
           </Button>
         </Form.Item>
       </Form>
-    </Space>
+    </div>
   );
 };
 

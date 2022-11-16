@@ -9,7 +9,7 @@ const initialSate = {
 export default (state = initialSate, action) => {
     switch (action.type) {
 
-        case Actions.AUTH_LOGIN: {
+        case Actions.AUTH_SAVE_LOGIN_STATUS: {
             const { data = {} } = action;
             const { isAdmin, isLogin, isUser } = data;
             return {

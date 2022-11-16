@@ -10,6 +10,7 @@ import {
   Typography,
   Upload,
   Checkbox,
+  Switch,
 } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +27,6 @@ const FormChinhSuaSanPham = () => {
   );
   const dispatch = useDispatch();
   const [imageUrl, setImageUrl] = useState();
-  const [sanPham, setSanPham] = useState({});
   const [form] = Form.useForm();
 
   const normFile = (e) => {
@@ -38,7 +38,6 @@ const FormChinhSuaSanPham = () => {
 
   useEffect(() => {
     const [sanPham] = danhSachSanPham.filter((sanPham) => sanPham.id === id);
-    setSanPham(sanPham);
     form.setFieldsValue(sanPham);
   }, [id]);
 
@@ -85,23 +84,35 @@ const FormChinhSuaSanPham = () => {
   };
 
   return (
-    <Space style={{ width: "100%" }} direction="vertical">
-      <Title>Tạo sản phẩm mới</Title>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Title> Chỉnh sửa sản phẩm </Title>
       <Divider />
       <Form
         form={form}
-        layout="vertical"
+        style={{
+          width: "60%",
+        }}
+        // layout="vertical"
         colon={true}
         labelAlign="left"
-        name="basic"
+        name="updateForm"
         labelCol={{
-          span: 5,
+          offset: 4,
+          span: 6,
         }}
         wrapperCol={{
-          span: 15,
+          offset: 1,
+          span: 13,
         }}
         initialValues={{
-          ten: sanPham.ten,
+          remember: true,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -110,7 +121,7 @@ const FormChinhSuaSanPham = () => {
       >
         <Form.Item
           name="upload"
-          label="Upload"
+          label="Hình ảnh"
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >
@@ -168,21 +179,31 @@ const FormChinhSuaSanPham = () => {
           <InputNumber />
         </Form.Item>
 
-        <Form.Item name="hienThi" initialValue={false} valuePropName="checked">
-          <Checkbox>Hiển thị</Checkbox>
+        <Form.Item name="moTa" label="Mô tả sản phẩm" initialValue={""}>
+          <Input.TextArea />
         </Form.Item>
+
+        <Form.Item
+          label="Hiển thị"
+          name="hienThi"
+          initialValue={false}
+          valuePropName="checked"
+        >
+          <Switch />
+        </Form.Item>
+
         <Form.Item
           wrapperCol={{
-            offset: 7,
-            span: 14,
+            offset: 9,
+            span: 15,
           }}
         >
-          <Button type="primary" htmlType="submit">
-            Tạo sản phẩm
+          <Button size="large" shape="round" type="primary" htmlType="submit">
+            Chỉnh sửa sản phẩm
           </Button>
         </Form.Item>
       </Form>
-    </Space>
+    </div>
   );
 };
 

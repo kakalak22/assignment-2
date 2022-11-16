@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Actions from "../actionsTypeSanpham";
 import axios from "axios";
 import * as lodash from "lodash";
+import * as DogNames from "dog-names";
 
 export function* watcherSanPham() {
     yield takeLeading(Actions.SAN_PHAM_CREATE_NEW, workerCreateNewSanPham);
@@ -83,17 +84,25 @@ function getRandomIntInclusive(min, max) {
 function* workerMappingSanPham(action) {
     try {
         const { data = {} } = action;
-        const { imageList } = data;
+        const { dogList } = data;
         let newDanhSachSanPham = [];
-        imageList.forEach((imageLink, index) => {
+        dogList.forEach((dog, index) => {
             const sanPhamTmp = {
+                // id: uuidv4(),
+                // ten: dog.name,
+                // moTa: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+                // linkHinhAnh: dog.image.url,
+                // donGia: getRandomIntInclusive(100, 5000) * 1000,
+                // soLuongSanPham: getRandomIntInclusive(0, 50),
+                // hienThi: true,
+                // moTa: dog.bred_for
                 id: uuidv4(),
-                ten: `Sản phẩm ${index + 1}`,
-                moTa: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-                linkHinhAnh: imageLink,
+                ten: dog.title,
+                linkHinhAnh: dog.thumbnail,
                 donGia: getRandomIntInclusive(100, 5000) * 1000,
                 soLuongSanPham: getRandomIntInclusive(0, 50),
-                hienThi: true
+                hienThi: true,
+                moTa: dog.description
             }
             newDanhSachSanPham.push(sanPhamTmp);
         })
@@ -113,7 +122,7 @@ function* workerCallApi(action) {
         yield put({
             type: Actions.SAN_PHAM_MAPPING,
             data: {
-                imageList: res
+                dogList: res
             }
         })
     } catch (error) { }
@@ -122,14 +131,18 @@ function* workerCallApi(action) {
 function workerDoApiCall(action) {
     const options = {
         method: 'GET',
-        url: 'http://shibe.online/api/shibes',
+        // url: 'https://api.thedogapi.com/v1/breeds',
+        // params: {
+        //     limit: 100
+        // }
+        url: "https://dummyjson.com/products",
         params: {
-            count: 100
+            limit: 100
         }
     };
 
     return axios(options).then(res => {
-        return res.data;
+        return res.data.products;
     }).catch(error => {
         return { error: "error-catch" };
     })
@@ -151,7 +164,18 @@ function* workerUpdateSanPham(action) {
             data: {
                 newDanhSachSanPham: newDanhSachSanPham
             }
+        });
+        yield put({
+            type: Actions.SAN_PHAM_CHECK_SAVED,
+            data: {
+                prevDanhSachSanPham: danhSachSanPham
+            }
         })
+
+        const res = yield take(Actions.SAN_PHAM_CHECK_SAVED_TAKE);
+        const { isSaved } = res.data;
+        if (isSaved)
+            getNotification("Thành công", "Sản phẩm đã được cập nhật");
     } catch (error) { }
 }
 

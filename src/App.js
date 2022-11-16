@@ -19,21 +19,8 @@ import Loading from './common/components/Loading';
 function App() {
   const navigate = useNavigate();
   const { isAdmin, isUser, isLogin } = useSelector(state => state.reducerAuth);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (isLogin) {
-      if (isUser) {
-        navigate("/client", { replace: true })
-      }
-      if (isAdmin) {
-        navigate("/admin/san-pham", { replace: true })
-      }
-    }
-    setLoading(false);
-  }, [])
 
-  if (loading) return <Loading />
 
   return (
     <Routes>
@@ -49,9 +36,10 @@ function App() {
           <Route path='san-pham' >
             <Route index element={<ProtectedRoute><DanhSachSanPham /></ProtectedRoute>} />
             <Route path='danh-sach-san-pham' element={(<ProtectedRoute><DanhSachSanPham /></ProtectedRoute>)} />
-            <Route path='tao-san-pham' element={<ProtectedRoute><FormTaoSanPham /></ProtectedRoute>} />
+            <Route path='tao-san-pham' element={<ProtectedRoute><FormTaoSanPham title="Tạo sản phẩm" /></ProtectedRoute>} />
             <Route path='chinh-sua-san-pham/:id' element={<ProtectedRoute><FormChinhSuaSanPham /></ProtectedRoute>} />
             <Route path='chi-tiet-san-pham/:id' element={<ProtectedRoute><ChiTietSanPham /></ProtectedRoute>} />
+            <Route path='preview' element={<ProtectedRoute><ClientLayout><DanhSachSanPhamClient /></ClientLayout></ProtectedRoute>} />
           </Route>
         </Route>}
         <Route path="*" element={<NotFound />} />

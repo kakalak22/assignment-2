@@ -9,15 +9,19 @@ import {
   Space,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SanPham from "./SanPham";
 import * as lodash from "lodash";
+import * as Actions from "../../../../admin/page/san-pham/actionsTypeSanpham";
+import Loading from "../../../../common/components/Loading";
 
 const DanhSachSanPhamClient = () => {
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
   const { searchResults } = useSelector((state) => state.reducerSearchResults);
+  const dispatch = useDispatch();
 
   //local state
+  const [loading, setLoading] = useState(false);
   const [pageTotal, setPageTotal] = useState(danhSachSanPham.length);
   const [filteredDanhSachSanPham, setFilteredDanhSachSanPham] = useState([]);
   const [paginatedList, setPaginatedList] = useState([]);
@@ -39,8 +43,7 @@ const DanhSachSanPhamClient = () => {
         newDanhSachSanPham = searchResults
           .filter((sanPham) => sanPham.donGia >= from && sanPham.donGia <= to)
           .filter((sanPham) => sanPham.hienThi);
-      }
-      if (searchResults?.length < 1) {
+      } else {
         newDanhSachSanPham = danhSachSanPham
           .filter((sanPham) => sanPham.donGia >= from && sanPham.donGia <= to)
           .filter((sanPham) => sanPham.hienThi);
@@ -60,13 +63,21 @@ const DanhSachSanPhamClient = () => {
   };
 
   useEffect(() => {
-    const newDanhSachSanPham = danhSachSanPham.filter(
-      (sanPham) => sanPham.hienThi
-    );
-    const temp = lodash(newDanhSachSanPham).slice(0).take(8).value();
-    setPaginatedList(temp);
-    setFilteredDanhSachSanPham(newDanhSachSanPham);
-  }, []);
+    if (danhSachSanPham.length < 1) {
+      dispatch({
+        type: Actions.CALL_API,
+      });
+    }
+    if (danhSachSanPham.length > 0) {
+      const newDanhSachSanPham = danhSachSanPham.filter(
+        (sanPham) => sanPham.hienThi
+      );
+      const temp = lodash(newDanhSachSanPham).slice(0).take(8).value();
+      setPaginatedList(temp);
+      setFilteredDanhSachSanPham(newDanhSachSanPham);
+    }
+    setLoading(false);
+  }, [danhSachSanPham]);
 
   useEffect(() => {
     if (selectedValue) {
@@ -127,6 +138,8 @@ const DanhSachSanPhamClient = () => {
       .value();
     setPaginatedList(temp);
   };
+
+  if (loading) return <Loading />;
 
   return (
     <React.Fragment>
@@ -219,7 +232,6 @@ const DanhSachSanPhamClient = () => {
       </Space.Compact>
       <Divider />
       <Space
-        direction="horizontal"
         size="large"
         style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
       >

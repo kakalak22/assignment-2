@@ -63,7 +63,7 @@ const SearchBox = ({ size, isSeclect, searchField }) => {
           showArrow={false}
           defaultValue="ten"
           style={{
-            width: 120,
+            width: 220,
           }}
           dropdownMatchSelectWidth={true}
           placement="bottomLeft"

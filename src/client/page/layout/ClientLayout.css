@@ -18,12 +18,14 @@
   background-color: #fb5231 !important;
 }
 
-.client-layout .ant-menu {
+.client-layout .client-header .ant-menu {
   background-color: #fb5231 !important;
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.client-layout .ant-menu-item {
+.client-layout .client-header .client-menu .ant-menu-item {
+  background-color: #fb5231 !important;
+
   color: #ffffff !important;
   font-size: 20px;
   font-weight: 300;
@@ -31,15 +33,21 @@
   align-items: center;
 }
 
-.client-layout .ant-menu-item::after {
+.client-layout .client-header .client-menu .ant-menu-item-selected {
+  box-shadow: 0 0 0 2px rgba(250, 219, 20, 0);
+  -webkit-box-shadow: 0px 0px 11px 2px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0px 0px 11px 2px rgba(0, 0, 0, 0);
+}
+
+.client-layout .client-header .client-menu .ant-menu-item::after {
   color: #ffffff !important;
   border-bottom: 2px thick rgba(255, 255, 255, 0.2) !important;
 }
-.client-layout .ant-menu-item-active::after {
+.client-layout .client-header .client-menu .ant-menu-item-active::after {
   border-bottom: 4px solid #ffffff !important;
 }
 
-.client-layout .ant-menu-item-selected::after {
+.client-layout .client-header .client-menu .ant-menu-item-selected::after {
   border-bottom: 2px solid #ffffff !important;
 }
 /* 

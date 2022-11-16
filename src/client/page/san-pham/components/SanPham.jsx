@@ -20,7 +20,8 @@ const SanPham = ({ sanPham }) => {
           }}
           width={250}
           height={187.5}
-          src={sanPham.linkHinhAnh}
+          src={sanPham.linkHinhAnh ? sanPham.linkHinhAnh : "error"}
+          fallback="https://apply.sts.net.pk/assets/images/default-upload-image.jpg"
           preview={false}
         />
         <Space
@@ -36,7 +37,7 @@ const SanPham = ({ sanPham }) => {
         >
           <h3>{sanPham.ten}</h3>
           <p>{numberWithDot(sanPham.donGia)} VND</p>
-          <p>{sanPham.soLuongSanPham}</p>
+          <p>Số lượng: {sanPham.soLuongSanPham}</p>
         </Space>
       </Space.Compact>
     </Card>

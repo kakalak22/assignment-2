@@ -56,7 +56,12 @@ const ChiTietSanPhamClient = () => {
         <div className="product-detail-wrapper">
           <Row align="middle" justify="center">
             <Col className="product-detail-image" span={6}>
-              <Image width={400} height={400} src={linkHinhAnh} />
+              <Image
+                width={400}
+                height={400}
+                src={linkHinhAnh ? linkHinhAnh : "error"}
+                fallback="https://apply.sts.net.pk/assets/images/default-upload-image.jpg"
+              />
             </Col>
             <Col offset={3} span={15}>
               <Title level={2}>{ten}</Title>

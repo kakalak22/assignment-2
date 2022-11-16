@@ -8,15 +8,21 @@ import {
   Space,
   Typography,
 } from "antd";
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../actionTypesAuth";
 import backgroundImg from "../../assets/login/bg.jpg";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../common/components/Loading";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { Title } = Typography;
+  const [loading, setLoading] = useState(true);
+
+  const { isAdmin, isUser, isLogin } = useSelector(
+    (state) => state.reducerAuth
+  );
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -31,6 +37,20 @@ const Login = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      if (isUser) {
+        navigate("/client", { replace: true });
+      }
+      if (isAdmin) {
+        navigate("/admin/san-pham", { replace: true });
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  if (loading) return <Loading />;
   return (
     <div
       style={{

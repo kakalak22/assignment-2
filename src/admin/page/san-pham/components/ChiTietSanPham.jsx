@@ -46,7 +46,12 @@ const ChiTietSanPham = () => {
           align="middle"
         >
           <Col span={6}>
-            <Image src={linkHinhAnh} width={300} height={300} />
+            <Image
+              src={linkHinhAnh ? linkHinhAnh : "error"}
+              fallback="https://apply.sts.net.pk/assets/images/default-upload-image.jpg"
+              width={300}
+              height={300}
+            />
           </Col>
           <Col offset={2} span={14}>
             <Descriptions

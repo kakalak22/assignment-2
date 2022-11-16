@@ -10,7 +10,6 @@ const DanhSachSanPham = () => {
   const dispatch = useDispatch();
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
   const { searchResults } = useSelector((state) => state.reducerSearchResults);
-  console.log(searchResults);
   useEffect(() => {
     if (danhSachSanPham.length < 1)
       dispatch({

@@ -83,7 +83,12 @@ const TableSanPham = ({ danhSachSanPham }) => {
       dataIndex: "linkHinhAnh",
       key: "linkHinhAnh",
       render: (linkHinhAnh) => (
-        <Image src={linkHinhAnh} width={100} height={100} />
+        <Image
+          src={linkHinhAnh ? linkHinhAnh : "error"}
+          fallback="https://apply.sts.net.pk/assets/images/default-upload-image.jpg"
+          width={100}
+          height={100}
+        />
       ),
     },
     {

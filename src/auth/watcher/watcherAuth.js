@@ -6,6 +6,7 @@ import { notification } from "antd";
 
 export function* watcherAuth() {
     yield takeLeading(Actions.AUTH_CHECK_LOGIN, workerCheckLogin);
+    yield takeLeading(Actions.AUTH_LOGOUT, workerLogOut);
 }
 
 function* workerCheckLogin(action) {
@@ -13,7 +14,7 @@ function* workerCheckLogin(action) {
     const { user } = data;
     if (user.password === "123456" && user.username === "admin") {
         yield put({
-            type: Actions.AUTH_LOGIN,
+            type: Actions.AUTH_SAVE_LOGIN_STATUS,
             data: {
                 isAdmin: true,
                 isLogin: true,
@@ -25,7 +26,7 @@ function* workerCheckLogin(action) {
     }
     if (user.password === "123456" && user.username === "client") {
         yield put({
-            type: Actions.AUTH_LOGIN,
+            type: Actions.AUTH_SAVE_LOGIN_STATUS,
             data: {
                 isAdmin: false,
                 isLogin: true,
@@ -37,6 +38,26 @@ function* workerCheckLogin(action) {
     }
     notification.error({
         message: "Đăng nhập thất bại",
-        description: "Sai Username hoặc Password"
+        description: "Sai Username hoặc Password",
+        duration: 2
     })
 }
+
+function* workerLogOut(action) {
+    try {
+        console.log("log out")
+        const { isLogin } = yield select(state => state.reducerAuth)
+        if (isLogin) {
+            yield put({
+                type: Actions.AUTH_SAVE_LOGIN_STATUS,
+                data: {
+                    isAdmin: false,
+                    isLogin: false,
+                    isUser: false
+                }
+            })
+            action.navigate("/", { replace: true });
+        }
+    } catch (error) { }
+}
+
