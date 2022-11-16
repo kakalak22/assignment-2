@@ -26,6 +26,8 @@ function App() {
     <Routes>
       <Route path='/'>
         <Route index element={<Login />} />
+        <Route path='login' element={<Login />} />
+
         {isUser &&
           <Route path="client">
             <Route index element={<ProtectedRoute><DanhSachSanPhamClient /></ProtectedRoute>} />

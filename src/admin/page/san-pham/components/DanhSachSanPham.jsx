@@ -9,7 +9,6 @@ import TableSanPham from "./TableSanPham";
 const DanhSachSanPham = () => {
   const dispatch = useDispatch();
   const { danhSachSanPham } = useSelector((state) => state.reducerSanPham);
-  console.log(danhSachSanPham);
   const { searchResults } = useSelector((state) => state.reducerSearchResults);
   useEffect(() => {
     if (danhSachSanPham.length < 1)
